@@ -1,0 +1,3 @@
+Follow workflows/weekly-reflection.md.
+
+This is a one-shot Sunday review. Ask once. Do not send a second prompt if the owner does not reply. Save or promote nothing unless he explicitly asks. Do not execute commands or include confidential work content.

@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "One Telegram message",
+    "quality_profile": "showcase",
+    "primary_path": ["you", "telegram", "gateway", "stt", "groq", "telegram", "you"]
+  },
+  "participants": [
+    { "id": "you", "label": "You" },
+    { "id": "telegram", "label": "Telegram" },
+    { "id": "gateway", "label": "OpenClaw gateway" },
+    { "id": "stt", "label": "STT" },
+    { "id": "groq", "label": "Groq" },
+    { "id": "gemini", "label": "Gemini" },
+    { "id": "gpt", "label": "GPT" }
+  ],
+  "messages": [
+    { "from": "you", "to": "telegram", "label": "text or voice" },
+    { "from": "telegram", "to": "gateway", "label": "delivery only" },
+    {
+      "from": "gateway",
+      "to": "stt",
+      "label": "EN Whisper / TE ElevenLabs",
+      "note": "voice notes only"
+    },
+    { "from": "stt", "to": "gateway", "label": "transcript", "variant": "return" },
+    { "from": "gateway", "to": "groq", "label": "write reply" },
+    {
+      "from": "groq",
+      "to": "gemini",
+      "label": "if Groq fails",
+      "variant": "dashed"
+    },
+    {
+      "from": "gemini",
+      "to": "gpt",
+      "label": "if Gemini fails",
+      "variant": "dashed"
+    },
+    { "from": "gateway", "to": "telegram", "label": "English text" },
+    { "from": "telegram", "to": "you", "label": "message" }
+  ]
+}

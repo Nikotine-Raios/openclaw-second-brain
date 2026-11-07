@@ -1,0 +1,17 @@
+# Secrets and runtime state never belong in this repo
+.env
+.env.*
+*.pem
+*.key
+*.token
+scheduler/scheduler.env
+scheduler/locks/
+scheduler/logs/
+.openclaw/
+backups/
+logs/
+tmp/
+
+.DS_Store
+Thumbs.db
+.vscode/

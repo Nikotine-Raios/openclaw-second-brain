@@ -1,0 +1,7 @@
+* text=auto
+*.sh text eol=lf
+*.service text eol=lf
+*.timer text eol=lf
+scheduler/sudoers.d/* text eol=lf
+scheduler/prompts/*.txt text eol=lf
+scripts/openclaw-pretty-fallback-notices text eol=lf

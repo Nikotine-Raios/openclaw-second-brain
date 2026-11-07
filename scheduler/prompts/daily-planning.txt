@@ -1,0 +1,5 @@
+Follow workflows/daily-planning.md.
+
+This is a one-shot morning check-in. Ask once for today's top outcomes, constraints, and fixed commitments. Return at most three priorities, the first concrete action for each, and a short end-of-day check.
+
+Do not send a second prompt. Do not remind the owner if he has not replied. Do not infer that silence means you should ask again. Save nothing unless the owner explicitly asks. Do not execute commands or include confidential work content.

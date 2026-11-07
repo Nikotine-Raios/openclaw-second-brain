@@ -1,0 +1,10 @@
+# Cursor-facing alias. Build:
+#   ollama create cursor-local -f scripts/Modelfile.qwen3-cursor
+#
+# Based on qwen2.5-coder rather than qwen3. Qwen3 is a thinking model, and over the
+# OpenAI-compatible /v1 endpoint Ollama returns the trace in a separate `reasoning`
+# field while `content` stays empty, so Cursor renders blank replies.
+# Cursor also sends 30k+ token prompts, well past Ollama's default context.
+FROM qwen2.5-coder:7b
+PARAMETER num_ctx 32768
+PARAMETER temperature 0.4

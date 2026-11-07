@@ -1,0 +1,3 @@
+Follow workflows/personal-project-copilot.md.
+
+This is a one-shot monthly personal-project review. Ask once. Do not send a second prompt if the owner does not reply. Do not execute commands, publish anything, or save notes unless he explicitly asks. No confidential work content.

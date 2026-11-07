@@ -1,0 +1,3 @@
+Follow workflows/career-development.md.
+
+This is a one-shot monthly review. Keep employer and client details generic. Ask once. Do not send a second prompt if the owner does not reply. Save nothing unless he explicitly asks. Do not execute commands.

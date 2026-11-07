@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Self-hosted assistant",
+    "quality_profile": "showcase",
+    "primary_path": ["you", "telegram", "server", "groq", "reply"]
+  },
+  "components": [
+    {
+      "id": "you",
+      "type": "external",
+      "label": "YOU",
+      "sublabel": "phone",
+      "telegram_lines": ["YOU · phone"]
+    },
+    {
+      "id": "telegram",
+      "type": "external",
+      "label": "Telegram",
+      "sublabel": "delivery only",
+      "telegram_lines": ["TELEGRAM · delivery only"]
+    },
+    {
+      "id": "server",
+      "type": "backend",
+      "label": "YOUR SERVER",
+      "sublabel": "the brain",
+      "telegram_lines": [
+        "YOUR SERVER · the brain",
+        "EN voice = Whisper",
+        "TE voice = ElevenLabs",
+        "memory, owns all schedules"
+      ],
+      "tag": "heavy"
+    },
+    {
+      "id": "groq",
+      "type": "cloud",
+      "label": "Groq",
+      "sublabel": "writes the reply",
+      "telegram_lines": [
+        "GROQ · writes the reply",
+        "else Gemini, then GPT"
+      ]
+    },
+    {
+      "id": "reply",
+      "type": "frontend",
+      "label": "BACK TO YOU",
+      "sublabel": "English",
+      "telegram_lines": ["BACK TO YOU · English"]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Droplet",
+      "wraps": ["server"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "you-to-telegram",
+      "from": "you",
+      "to": "telegram",
+      "label": "chat or voice",
+      "variant": "emphasis"
+    },
+    {
+      "id": "telegram-to-server",
+      "from": "telegram",
+      "to": "server",
+      "label": "delivery"
+    },
+    {
+      "id": "server-to-groq",
+      "from": "server",
+      "to": "groq",
+      "label": "chat completions",
+      "variant": "emphasis"
+    },
+    {
+      "id": "groq-to-reply",
+      "from": "groq",
+      "to": "reply",
+      "label": "English text"
+    }
+  ],
+  "cards": [
+    {
+      "title": "STT",
+      "items": [
+        "English audio stays on the server (Whisper).",
+        "Telugu audio goes to ElevenLabs for transcription only."
+      ]
+    },
+    {
+      "title": "LLM",
+      "items": [
+        "Primary: Groq openai/gpt-oss-120b via groqapi.",
+        "Fallback: Gemini 3.5 Flash Lite, then GPT 5.6 Terra."
+      ]
+    },
+    {
+      "title": "Schedule",
+      "items": [
+        "island-scheduler owns timing (UTC).",
+        "Each prompt fires once. Silence is not a trigger."
+      ]
+    }
+  ],
+  "telegram_notes": [
+    "English STT stays on the server.",
+    "Telugu STT uses ElevenLabs."
+  ]
+}

@@ -1,0 +1,4 @@
+# Narrow passwordless path for the owner-owned scheduler.
+# Does not grant a general NOPASSWD shell.
+admin ALL=(openclaw) NOPASSWD: /home/openclaw/.openclaw/bin/openclaw
+admin ALL=(root) NOPASSWD: /usr/bin/systemctl start island-scheduler.service, /usr/bin/systemctl start island-scheduler.timer, /usr/bin/systemctl stop island-scheduler.service, /usr/bin/systemctl stop island-scheduler.timer, /usr/bin/systemctl restart island-scheduler.service, /usr/bin/systemctl restart island-scheduler.timer, /usr/bin/systemctl enable island-scheduler.timer, /usr/bin/systemctl disable island-scheduler.timer, /usr/bin/systemctl status island-scheduler.service, /usr/bin/systemctl status island-scheduler.timer, /usr/bin/systemctl daemon-reload, /usr/bin/systemctl list-timers

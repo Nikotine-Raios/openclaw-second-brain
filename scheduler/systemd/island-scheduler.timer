@@ -1,0 +1,12 @@
+[Unit]
+Description=Island workflow clock (UTC windows, 15-minute ticks)
+
+[Timer]
+OnCalendar=*-*-* *:00,15:00
+AccuracySec=30s
+Persistent=false
+RandomizedDelaySec=0
+Unit=island-scheduler.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,16 @@
+[Unit]
+Description=Island owner-owned workflow scheduler
+After=network-online.target openclaw-gateway.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=admin
+Group=admin
+WorkingDirectory=/home/admin/island-scheduler
+Environment=ISLAND_SCHEDULER_ROOT=/home/admin/island-scheduler
+ExecStart=/home/admin/island-scheduler/run-workflow.sh
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

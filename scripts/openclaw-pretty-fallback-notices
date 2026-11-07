@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+"""Re-apply human fallback notices. Safe to run on every gateway start."""
+from pathlib import Path
+import sys
+
+ROOTS = [
+    Path("/home/openclaw/.openclaw/tools"),
+    Path("/home/openclaw/.openclaw/lib"),
+    Path("/home/openclaw/.openclaw/bin"),
+]
+HELPER = r"""function prettyFallbackModel(ref) {
+  const r = String(ref || "");
+  if (/groq/i.test(r)) return "Groq";
+  if (/gemini|^google\//i.test(r)) return "Gemini";
+  if (/^openai\//i.test(r) || /gpt-5/i.test(r)) return "GPT";
+  const parts = r.split("/");
+  return parts[parts.length - 1] || r;
+}
+function prettyFallbackReason(reason) {
+  const x = String(reason || "").toLowerCase();
+  if (x.includes("rate") || x.includes("quota") || x.includes("429") || x.includes("usage limit")) return "depleted";
+  if (x.includes("not found") || x.includes("unavailable")) return "unavailable";
+  if (x.includes("auth")) return "sign-in failed";
+  return "unavailable";
+}
+"""
+OLD = "return `↪️ Model Fallback: ${active} (selected ${selected}; ${reasonSummary})`;"
+NEW = "return `⚠️ ${prettyFallbackModel(selected)} ${prettyFallbackReason(reasonSummary)} — fallback responding: ${prettyFallbackModel(active)}`;"
+OLD_CLEAR_A = "return `↪️ Model Fallback cleared: ${selected} (was ${previous})`;"
+NEW_CLEAR_A = "return `✅ Back on ${prettyFallbackModel(selected)}`;"
+OLD_CLEAR_B = "return `↪️ Model Fallback cleared: ${selected}`;"
+NEW_CLEAR_B = "return `✅ Back on ${prettyFallbackModel(selected)}`;"
+
+
+def iter_js():
+    for root in ROOTS:
+        if not root.exists():
+            continue
+        yield from root.rglob("*.js")
+
+
+def patch(text: str) -> str:
+    if "function prettyFallbackModel" not in text:
+        if "function buildFallbackNotice" in text:
+            text = text.replace("function buildFallbackNotice", HELPER + "function buildFallbackNotice", 1)
+        elif "export function buildFallbackNotice" in text:
+            text = text.replace("export function buildFallbackNotice", HELPER + "export function buildFallbackNotice", 1)
+    text = text.replace(OLD, NEW)
+    text = text.replace(OLD_CLEAR_A, NEW_CLEAR_A)
+    text = text.replace(OLD_CLEAR_B, NEW_CLEAR_B)
+    return text
+
+
+def main() -> int:
+    patched = []
+    scanned = False
+    for path in iter_js():
+        scanned = True
+        try:
+            original = path.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        if "Model Fallback" not in original and "prettyFallbackModel" not in original:
+            continue
+        updated = patch(original)
+        if updated == original:
+            continue
+        try:
+            path.write_text(updated, encoding="utf-8")
+            patched.append(str(path))
+        except OSError as exc:
+            print(f"pretty-fallback: skip {path}: {exc}", file=sys.stderr)
+    if patched:
+        print("pretty-fallback: patched " + ", ".join(patched))
+    else:
+        print("pretty-fallback: already applied or formatter not found")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
