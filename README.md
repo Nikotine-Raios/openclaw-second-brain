@@ -1,4 +1,4 @@
-# Self-Hosted Assistant
+# OpenClaw Second Brain
 
 A self-hosted personal AI assistant that I run on a small cloud server and talk to from my phone over Telegram, by text or voice. It checks in on a schedule (daily planning, weekly reflection, monthly reviews), remembers only what I explicitly ask it to, and keeps working when a model provider goes down.
 
